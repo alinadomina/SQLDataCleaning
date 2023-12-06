@@ -1,21 +1,21 @@
 
--- Cleaning Data in SQL Queries-- 
+-- Cleaning Data in SQL Queries 
 Select *
 From DataCleaning.dbo.Real_Estate
 
--- Standardize Date format
+-- Standardize Date format for SaleDate column
 Select SaleDate
 From DataCleaning.dbo.Real_Estate
 
 ALTER TABLE Real_Estate
 ALTER COLUMN SaleDate date
 
--- Populate Property Adress data
+-- Populate Property Adress data for Properties having same ParcelId, but different UniqueID of the deal
 SELECT *
 FROM DataCleaning.dbo.Real_Estate
 WHERE PropertyAddress is NULL
 
-Select ISNULL(a.PropertyAddress,b.PropertyAddress) as PopulatedPropertyID, *
+Select ISNULL(a.PropertyAddress,b.PropertyAddress) as PopulatedPropertyAddress, *
 From DataCleaning.dbo.Real_Estate a
     JOIN DataCleaning.dbo.Real_Estate b ON a.ParcelID=b.ParcelID AND a.UniqueID<>b.UniqueID
 WHERE a.PropertyAddress is NULL
@@ -77,7 +77,7 @@ WHEN  SoldAsVacant ='N' THEN 'No'
 ELSE SoldAsVacant
 END
 
--- RemoveDublicates
+-- Remove Dublicates
 WITH
     Cte_Row_Num
     as
